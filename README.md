@@ -10,6 +10,13 @@ npm start
 cd ..
 ```
 
+### Execute the app
+
+![alt text](ressources/image-3.png)
+![alt text](ressources/image.png)
+![alt text](ressources/image-1.png)
+![alt text](ressources/image-2.png)
+
 ### Tutorial
 
 Tutorial to create the login - signup page :
@@ -30,6 +37,15 @@ div.my-class
 
 ## sql-db with nodeJS
 
+### Start the server
+
+Use the following command to start the server :
+
+```bash
+cd .\sql-db\
+npm start
+```
+
 ### Tutorial
 
 Tutorial to connect the react app to the sql database :
@@ -43,3 +59,11 @@ npm init -y
 ```bash
 npm install express mysql cors nodemon
 ```
+### Information about the server
+
+The server is running on port **8081**.
+
+The database is named **chatbot_db**.
+
+The tables are :
+- **users** : id, username, email, password
