@@ -67,3 +67,7 @@ The database is named **chatbot_db**.
 
 The tables are :
 - **users** : id, username, email, password
+
+### Execute the server
+
+![alt text](ressources/image.png)
