@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
-import './Login.css'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import './Login.css';
+import { Link, useNavigate } from 'react-router-dom';
 import validationLogin from '../../utils/ValidationLogin';  // No curly braces for default export
 import axios from 'axios'
+import { useAuth } from '../../context/AuthContext';
 
-
-import password_icon from '../../assets/password.png'
-import email_icon from '../../assets/email.png'
+import password_icon from '../../assets/password.png';
+import email_icon from '../../assets/email.png';
 
 export const Login = () => {
     const [values, setValues] = useState({
         email: '',
         password: ''
     })
+
+    const { login } = useAuth();
 
     const navigation = useNavigate();
 
@@ -24,13 +26,22 @@ export const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         setErrors(validationLogin(values));
+
         if (errors.email === '' && errors.password === '') {
+
             axios.post('http://localhost:8081/login', values)
+
             .then(res => {
+                console.log("Login submitted")
                 console.log(res);
+
                 if (res.data === 'Success') {
                     console.log('Login Success');
+                    const userData = { name: values.email };
+                    console.log(userData)
+                    login(userData);
                     navigation('/home');
                 } else {
                     console.log('Login Failed');
