@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
+from datetime import datetime
+from bot import Bot
 
 app = Flask(__name__)
 CORS(app)
+
+chatBot = Bot()
 
 # Database configuration
 db = mysql.connector.connect(
@@ -47,6 +51,127 @@ def login():
             return jsonify("Success"), 200
         else:
             return jsonify("Failed"), 401
+    except mysql.connector.Error as err:
+        print("Error:", err)
+        return jsonify("Error"), 500
+    finally:
+        cursor.close()
+
+@app.route('/getChatsFromUser', methods=['POST'])
+def getChatsFromUser():
+    data = request.json
+    email = data.get('name')
+
+    cursor = db.cursor(dictionary=True)
+    try:
+        query = "SELECT \
+                    CHT.name AS 'chatName',\
+                    CHT.id AS 'chatId',\
+                    MSG.content AS 'lastMessage'\
+                FROM \
+                    chats CHT\
+                INNER JOIN \
+                    messages MSG \
+                ON \
+                    CHT.id = MSG.id_chat\
+                WHERE \
+                    MSG.id = (\
+                        SELECT MAX(MSG2.id)\
+                        FROM messages MSG2\
+                        WHERE MSG2.id_chat = CHT.id\
+                    )\
+                AND \
+                    CHT.id_user = (\
+                        SELECT USR.id \
+                        FROM users USR \
+                        WHERE USR.email = %s\
+                    );\
+"
+        # print(query)
+        cursor.execute(query, (email,))
+        chats = cursor.fetchall()
+        if chats:
+            return jsonify(chats), 200
+        else:
+            return jsonify({"message": "No chats found"}), 404
+    except mysql.connector.Error as err:
+        print("Error:", err)
+        return jsonify("Error"), 500
+    finally:
+        cursor.close()
+
+@app.route('/getUsernameFromMail', methods=['POST'])
+def getUsernameFromMail():
+    data = request.json
+    email = data.get('email')
+
+    cursor = db.cursor(dictionary=True)
+    try:
+        query = "SELECT \
+                    USR.username AS 'username'\
+                FROM \
+                    users USR\
+                WHERE \
+                    USR.email = %s\
+                ;"
+        
+        cursor.execute(query, (email,))
+        username = cursor.fetchone()
+        if username:
+            return jsonify(username), 200
+        else:
+            return jsonify({"message": "No username found"}), 404
+    except mysql.connector.Error as err:
+        print("Error:", err)
+        return jsonify("Error"), 500
+    finally:
+        cursor.close()
+
+@app.route('/getMessagesFromChat', methods=['POST'])
+def getMessagesFromChat():
+    data = request.json
+    chatId = data.get('chatId')
+
+    cursor = db.cursor(dictionary=True)
+    try:
+        query = "SELECT \
+                    *\
+                FROM \
+                    messages MSG\
+                WHERE \
+                    MSG.id_chat = %s\
+                ;"
+        
+        cursor.execute(query, (chatId,))
+        messages = cursor.fetchall()
+        if messages:
+            return jsonify(messages), 200
+        else:
+            return jsonify({"message": "No messages found"}), 404
+    except mysql.connector.Error as err:
+        print("Error:", err)
+        return jsonify("Error"), 500
+    finally:
+        cursor.close()
+
+@app.route('/sendMessage', methods=['POST'])
+def sendMessage():
+    data = request.json
+    chatId = data.get('chatId')
+    content = data.get('content')
+    date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+    bot_response = chatBot.get_response(content)
+
+    cursor = db.cursor()
+
+    try:
+        query = "INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);\
+                INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);"
+        cursor.execute(query, (chatId, content, False, date, chatId, bot_response, True, date))
+        # db.commit()
+        return jsonify("Message sent successfully"), 201
     except mysql.connector.Error as err:
         print("Error:", err)
         return jsonify("Error"), 500

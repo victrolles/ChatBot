@@ -23,6 +23,10 @@ Tutorial to create the login - signup page :
 
 https://www.youtube.com/watch?v=8QgQKRcAUvM
 
+Tutorial to create the chat interface and authentification :
+
+https://www.youtube.com/watch?v=k4mjF4sPITE
+
 Create components :
     
 ```bash

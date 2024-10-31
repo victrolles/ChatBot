@@ -24,35 +24,32 @@ export const Login = () => {
         setValues(prev => ({...prev, [e.target.name]: e.target.value}))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        setErrors(validationLogin(values));
-
-        if (errors.email === '' && errors.password === '') {
-
-            axios.post('http://localhost:8081/login', values)
-
-            .then(res => {
-                console.log("Login submitted")
-                console.log(res);
-
+    
+        const validationErrors = validationLogin(values);
+        setErrors(validationErrors);
+    
+        if (!validationErrors.email && !validationErrors.password) {
+            console.log('Form submitted');
+            try {
+                const res = await axios.post('http://localhost:8081/login', values);
+                console.log("Login submitted", res);
+    
                 if (res.data === 'Success') {
                     console.log('Login Success');
                     const userData = { name: values.email };
-                    console.log(userData)
                     login(userData);
                     navigation('/home');
                 } else {
                     console.log('Login Failed');
                     alert('Login Failed');
                 }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            } catch (err) {
+                console.error(err);
+            }
         }
-    }
+    };
 
     return (
         <div className='container'>

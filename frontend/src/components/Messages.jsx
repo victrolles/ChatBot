@@ -1,14 +1,34 @@
-import React from 'react'
+import { React, useEffect, useState } from 'react'
 import Message from './Message'
+import { useChat } from '../context/ChatContext'
+import axios from 'axios'
 
 const Messages = () => {
+
+  const [messages, setMessages] = useState([])
+
+  const { chatId } = useChat()
+
+  useEffect(() => {
+    if (chatId) {
+        axios.post('http://localhost:8081/getMessagesFromChat', { chatId: chatId })
+            .then(res => {
+                if (res.status === 200) {
+                  setMessages(res.data);  // Store the chats in the state
+                    console.log('Messages retrieved:', res.data);
+                } else {
+                    console.log('No messages found');
+                }
+            })
+            .catch(err => console.error('Error fetching messages:', err));
+    }
+  }, [chatId]);
+
   return (
     <div className='messages'>
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+      {messages.map((message) => (
+        <Message key={message.id} message={message} />
+      ))}
     </div>
   )
 }
