@@ -163,15 +163,20 @@ def sendMessage():
 
 
     bot_response = chatBot.get_response(content)
+    print("Bot response:", bot_response)
 
     cursor = db.cursor()
 
     try:
-        query = "INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);\
-                INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);"
-        cursor.execute(query, (chatId, content, False, date, chatId, bot_response, True, date))
-        # db.commit()
-        return jsonify("Message sent successfully"), 201
+        query1 = "INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);"
+        cursor.execute(query1, (chatId, content, False, date))
+        
+        query2 = "INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);"
+        cursor.execute(query2, (chatId, bot_response, True, date))
+        
+        db.commit()
+
+        return jsonify("Message sent successfully"), 200
     except mysql.connector.Error as err:
         print("Error:", err)
         return jsonify("Error"), 500

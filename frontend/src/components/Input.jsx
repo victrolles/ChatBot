@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import { useChat } from '../context/ChatContext'
 import axios from 'axios'
 
@@ -19,6 +19,9 @@ const Input = () => {
           }
         })
         .catch(err => console.error('Error sending message:', err));
+      
+      setText('')
+      // refresh messages
     }
   }
 
