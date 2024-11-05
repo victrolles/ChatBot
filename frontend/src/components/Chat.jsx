@@ -1,19 +1,21 @@
 import React from 'react'
 import Messages from './Messages'
+import NewChat from './NewChat'
 import Input from './Input'
 
 import { useChat } from '../context/ChatContext'
 
 const Chat = () => {
 
-  const { chatName } = useChat()
+  const { chatId, chatName } = useChat()
+  console.log('Chat ID:', chatId);
 
   return (
     <div className='chat'>
         <div className="chat-header">
             <span className="title">{chatName}</span>
         </div>
-        <Messages />
+        {chatId ? <Messages /> : <NewChat />}
         <Input />
     </div>
   )

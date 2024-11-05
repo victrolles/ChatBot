@@ -8,7 +8,7 @@ const Chats = () => {
     const [chats, setChats] = useState([])
 
     const { user } = useAuth()
-    const { sub } = useChat()
+    const { sub, trigger } = useChat()
 
     useEffect(() => {
         if (user) {
@@ -23,7 +23,7 @@ const Chats = () => {
                 })
                 .catch(err => console.error('Error fetching chats:', err));
         }
-    }, [user]);
+    }, [user, trigger]);
 
     const handleSelect = (chatId, chatName) => {
         sub({ id: chatId, name: chatName });

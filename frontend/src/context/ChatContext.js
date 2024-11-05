@@ -4,7 +4,8 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
     const [chatId, setChatId] = useState(null);
-    const [chatName, setChatName] = useState(null);  // New state for chatName
+    const [chatName, setChatName] = useState(null);
+    const [trigger, setTrigger] = useState(false);
 
     const sub = ({ id, name }) => {  // Destructure id and name from the chat object
         setChatId(id);
@@ -16,8 +17,12 @@ export const ChatContextProvider = ({ children }) => {
         setChatName(null);  // Clear chatName as well on unsubscribe
     };
 
+    const refresh = () => {
+        setTrigger(!trigger);
+    };
+
     return (
-        <ChatContext.Provider value={{ chatId, chatName, sub, unsub }}>
+        <ChatContext.Provider value={{ chatId, chatName, trigger, sub, unsub, refresh }}>
             {children}
         </ChatContext.Provider>
     );

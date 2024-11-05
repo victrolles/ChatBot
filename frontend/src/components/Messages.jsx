@@ -7,7 +7,7 @@ const Messages = () => {
 
   const [messages, setMessages] = useState([])
 
-  const { chatId } = useChat()
+  const { chatId, trigger } = useChat()
 
   useEffect(() => {
     if (chatId) {
@@ -22,7 +22,7 @@ const Messages = () => {
             })
             .catch(err => console.error('Error fetching messages:', err));
     }
-  }, [chatId]);
+  }, [chatId, trigger]);
 
   return (
     <div className='messages'>

@@ -1,5 +1,5 @@
 .home {
-    background-color: #a7bcff;
+    background-color: var(--blue-gradient);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -7,7 +7,7 @@
     
 
     .home-container {
-        border: 1px solid #fff;
+        border: 2px solid var(--white-01);
         border-radius: 10px;
         width: 65%;
         height: 80%;
@@ -18,17 +18,41 @@
         .sidebar {
             flex: 1;
             border-right: 1px solid #3e3c61;
-            background-color: #3e3c61;
-            
+            background-color: var(--white-02);
+
+            .newChats {
+                background-color: var(--blue-02);
+                height: 50px;
+                padding: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                button {
+                    background-color: var(--white-01);
+                    color: var(--gray-01);
+                    padding: 6px;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 20px;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+
+            }
+
+            .chats {
+                height: calc(100% - 155px);
+            }
 
             .navbar {
                 display: flex;
                 align-items: center;
-                background-color: #2f2d52;
+                background-color: var(--blue-02);
                 height: 50px;
                 padding: 10px;
                 justify-content: space-between;
-                color: #ddddf7;
+                color: var(--white-01);
 
                 .logo img {
                     width: 40px;
@@ -40,24 +64,26 @@
                     gap: 10px;
 
                     button {
-                        background-color: #5d5b8d;
-                        color: #ddddf7;
+                        background-color: var(--white-01);
+                        color: var(--gray-01);
                         border: none;
-                        font-size: 10px;
+                        border-radius: 5px;
+                        font-size: 15px;
+                        font-weight: 700;
                         cursor: pointer;
                     }
                 }
             }
 
             .userChat {
-                color: #ddddf7;
+                color: var(--white-01);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                background-color: #5d5b8d;
+                background-color: var(--blue-03);
                 margin: 5px;
-                border-radius: 10px;
+                border-radius: 20px;
                 padding: 10px;
                 cursor: pointer;
 
@@ -76,20 +102,45 @@
             flex: 2;
 
             .chat-header {
-                background-color: #5d5b8d;
+                background-color: var(--white-02);
                 height: 60px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
                 span  {
-                    font-size: 20px;
-                    color: #ddddf7;
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--blue-04);
+                }
+            }
+
+            .newChat {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                padding: 10px;
+                height: calc(100% - 150px);
+                background-color: var(--white-01);
+
+                img {
+                    width: 90px;
+                    height: 90px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+
+                p {
+                    color: var(--blue-00);
+                    font-size: 35px;
+                    font-weight: 700;
+                    margin: 10px;
                 }
             }
 
             .messages {
-                background-color: #ddddf7;
+                background-color: var(--white-01);
                 padding: 10px;
                 height: calc(100% - 150px);
                 overflow-y: scroll;
@@ -109,17 +160,17 @@
                     }
 
                     p {
-                        background-color: #5d5b8d;
+                        background-color: var(--blue-04);
                         padding: 10px;
                         border-radius: 0px 10px 10px 10px;
-                        color: #ddddf7;
+                        color: var(--white-01);
                     }
 
                     &.owner {
                         flex-direction: row-reverse;
 
                         p {
-                            background-color: #3e3c61;
+                            background-color: var(--violet-00);
                             border-radius: 10px 0px 10px 10px;
                         }
                     }
@@ -142,13 +193,15 @@
                     font-size: 18px;
 
                     &::placeholder {
-                        color: lightgray;
+                        color: var(--gray-00);
                     }
                 }
 
                 button {
-                    background-color: #5d5b8d;
-                    color: #ddddf7;
+                    background-color: var(--blue-04);
+                    color: var(--white-01);
+                    font-weight: 700;
+                    font-size: 18px;
                     border: none;
                     padding: 10px;
                     cursor: pointer;

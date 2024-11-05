@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
-from datetime import datetime
+
 from bot import Bot
 
 app = Flask(__name__)
@@ -161,13 +163,19 @@ def sendMessage():
     content = data.get('content')
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-
-    bot_response = chatBot.get_response(content)
-    print("Bot response:", bot_response)
-
     cursor = db.cursor()
 
     try:
+        # Get all conversations from the chat
+        query = "SELECT * FROM messages WHERE id_chat = %s;"
+        cursor.execute(query, (chatId,))
+        messages = cursor.fetchall()
+        print(messages)
+        
+        # Bot response
+        bot_response = chatBot.get_response(messages, content)
+        
+        # Send back to the database
         query1 = "INSERT INTO messages (id_chat, content, bot, date) VALUES (%s, %s, %s, %s);"
         cursor.execute(query1, (chatId, content, False, date))
         
@@ -182,6 +190,42 @@ def sendMessage():
         return jsonify("Error"), 500
     finally:
         cursor.close()
+
+@app.route('/createChat', methods=['POST'])
+def createChat():
+
+    # Get the email and content from the request
+    data = request.json
+    email = data.get('email')
+    content = data.get('content')
+
+    # Ask the chatbot to create a chat name
+    chatName = chatBot.get_chat_name(content)
+    # chatName = content
+
+    # Add the chat to the database
+    cursor = db.cursor(dictionary=True)
+    try:
+
+        query = "INSERT INTO chats (name, id_user) VALUES (%s, (SELECT id FROM users WHERE email = %s));"
+
+        cursor.execute(query, (chatName, email))
+        db.commit()
+
+        query = "SELECT * FROM chats CHT WHERE CHT.name = %s;"
+        cursor.execute(query, (chatName,))
+        newChat = cursor.fetchone()
+
+        return jsonify(newChat), 200
+    
+    except mysql.connector.Error as err:
+        print("Error:", err)
+        return jsonify("Error"), 500
+    
+    finally:
+        cursor.close()
+
+    
 
 if __name__ == '__main__':
     app.run(port=8081, debug=True)

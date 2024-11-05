@@ -1,8 +1,118 @@
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from huggingface_hub import login
+
+from utils import convert_messages_into_string, get_generated_text
+
+TOKEN = "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"
+
+login(token = TOKEN)
+
 class Bot:
 
     def __init__(self):
-        self.model = "llama"
-        print("Bot created")
 
-    def get_response(self, message: str) -> str:
-        return "I am a chatbot"
+        # Set the device
+        self.gpu = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        # Set the model name
+        model_name = "bigscience/bloomz-560m"
+
+        # Load the tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name
+        )
+        print("Tokenizer loaded")
+
+        # Configure the tokenizer to ensure padding is done right
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token_id = 0
+        self.tokenizer.padding_side = 'left'
+
+        # Load the model
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            trust_remote_code=True
+        )
+        print("Model loaded")
+        
+        # Move the model to the GPU
+        self.model.to(self.gpu)
+        print("Model moved to the GPU")
+
+        # Move the model to eval mode
+        self.model.eval()
+
+        self.generate_kwargs = {
+            "max_new_tokens": 512,
+            "temperature": 0.9,
+            "do_sample": True
+        }
+
+
+        print("Bot ready to chat")
+
+    def generate(self, prompts: list) -> list:
+
+        # Convert sentences in tokens
+        input_tokens = self.tokenizer.batch_encode_plus(
+            prompts,
+            return_tensors="pt",
+            padding = True
+        )
+
+        print("input_tokens", input_tokens)
+
+        # Send the tokens to the gpus
+        for t in input_tokens:
+            if torch.is_tensor(input_tokens[t]):
+                input_tokens[t] = input_tokens[t].to(self.gpu)
+
+        # Generate the outputs
+        output_tokens = self.model.generate(**input_tokens, **self.generate_kwargs)
+
+        print("output_tokens", output_tokens)
+
+        # Decode the tokens
+        outputs = self.tokenizer.batch_decode(output_tokens, skip_special_tokens=True)
+
+        print("outputs", outputs)
+
+        return outputs
+
+
+    def get_response(self, messages: list, lastMessage: str) -> str:
+
+        
+        # Convert the messages into a conversation
+        print(messages)
+        print(lastMessage)
+        prompts = [convert_messages_into_string(messages, lastMessage)]
+        print(prompts)
+
+        outputs = self.generate(prompts)
+
+        print(outputs)
+
+        generated_text = get_generated_text(outputs, prompts)
+
+        print(generated_text)
+
+
+        return generated_text
+    
+    def get_chat_name(self, firstMessage: int) -> str:
+
+        templates = [
+            f"You're a helpful assistant, he will ask you questions and you will answer them. Here is his first message: '{firstMessage}'. Can you generate a 2 or 3 word title which describes this chat? Answer :",
+        ]
+
+        outputs = self.generate(templates)
+
+        return get_generated_text(outputs, templates)
+    
+# if __name__ == "__main__":
+#     bot = Bot()
+#     messages = [(4, 'comment mérche le ceràeau ?', 2, datetime.datetime(2024, 10, 30, 18, 33, 40), 0), (5, "c'est complique", 2, datetime.datetime(2024, 10, 30, 18, 34, 39), 1)]
+#     lastMessage = "Explique plus en detail ?"
+#     bot.get_response(messages, lastMessage)
