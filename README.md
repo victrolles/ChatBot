@@ -24,7 +24,7 @@ In a terminal, use the following commands to start the frontend :
     ```bash
     npm i
     ```
-- Start the frontend (IMPORTANT : First start the database MySQL)
+- Start the frontend
     ```bash
     npm start
     ```
@@ -51,7 +51,7 @@ In **another** terminal, use the following commands to start the backend :
     ```bash
     pip install -r requirements.txt
     ```
-- Start the backend
+- Start the backend (IMPORTANT : First start the database MySQL)
     ```bash
     python app.py
     ```
