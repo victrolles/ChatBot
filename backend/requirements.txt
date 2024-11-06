@@ -5,3 +5,4 @@ mysql-connector-python==9.1.0
 torch==2.4.0
 transformers==4.46.1
 huggingface_hub==0.26.2
+numpy==1.26.4

@@ -1,5 +1,7 @@
 # ChatBot
 
+![alt text](ressources/image-4.png)
+
 ## Start the app
 
 This version to deploy the app is only dedicated to this branch. In this branch, we don't use Docker. We also don't use Kubernetes with minikube.
@@ -106,6 +108,7 @@ It may be automatically opened in your browser.
 
 ## Execution
 
+<video controls src="ressources/video-0.mp4" title="Title"></video>
 
 ## Tutorial (stuff learned)
 

@@ -171,7 +171,6 @@ def sendMessage():
         query = "SELECT * FROM messages WHERE id_chat = %s;"
         cursor.execute(query, (chatId,))
         messages = cursor.fetchall()
-        print(messages)
         
         # Bot response
         bot_response = chatBot.get_response(messages, content)

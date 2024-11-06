@@ -63,7 +63,7 @@ class Bot:
             padding = True
         )
 
-        print("input_tokens", input_tokens)
+        # print("input_tokens", input_tokens)
 
         # Send the tokens to the gpus
         for t in input_tokens:
@@ -73,12 +73,12 @@ class Bot:
         # Generate the outputs
         output_tokens = self.model.generate(**input_tokens, **self.generate_kwargs)
 
-        print("output_tokens", output_tokens)
+        # print("output_tokens", output_tokens)
 
         # Decode the tokens
         outputs = self.tokenizer.batch_decode(output_tokens, skip_special_tokens=True)
 
-        print("outputs", outputs)
+        # print("outputs", outputs)
 
         return outputs
 
