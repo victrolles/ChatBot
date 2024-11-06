@@ -108,7 +108,7 @@ It may be automatically opened in your browser.
 
 ## Execution
 
-<video controls src="ressources/video-0.mp4" title="Title"></video>
+https://github.com/user-attachments/assets/9b39747b-144a-466a-b4b0-bd2aa7f2b114
 
 ## Tutorial (stuff learned)
 
