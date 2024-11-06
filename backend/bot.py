@@ -1,12 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from huggingface_hub import login
 
 from utils import convert_messages_into_string, get_generated_text
-
-TOKEN = "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"
-
-login(token = TOKEN)
 
 class Bot:
 
@@ -17,6 +12,13 @@ class Bot:
 
         # Set the model name
         model_name = "bigscience/bloomz-560m"
+        # model_name = "bigscience/bloomz-1b7"
+        # model_name = "bigscience/bloomz-3b"
+        # model_name = "bigscience/bloomz-7b1"
+        # model_name = "meta-llama/Llama-2-7b-hf"
+        # model_name = "meta-llama/Llama-2-13b-hf"
+        # model_name = "google/flan-t5-large"
+
 
         # Load the tokenizer
         self.tokenizer = AutoTokenizer.from_pretrained(
@@ -82,24 +84,15 @@ class Bot:
 
 
     def get_response(self, messages: list, lastMessage: str) -> str:
-
         
         # Convert the messages into a conversation
-        print(messages)
-        print(lastMessage)
         prompts = [convert_messages_into_string(messages, lastMessage)]
-        print(prompts)
 
+        # Generate the response by the llm
         outputs = self.generate(prompts)
 
-        print(outputs)
-
-        generated_text = get_generated_text(outputs, prompts)
-
-        print(generated_text)
-
-
-        return generated_text
+        # return only the generated part of the new prompt
+        return get_generated_text(outputs, prompts)
     
     def get_chat_name(self, firstMessage: int) -> str:
 
@@ -110,9 +103,3 @@ class Bot:
         outputs = self.generate(templates)
 
         return get_generated_text(outputs, templates)
-    
-# if __name__ == "__main__":
-#     bot = Bot()
-#     messages = [(4, 'comment mérche le ceràeau ?', 2, datetime.datetime(2024, 10, 30, 18, 33, 40), 0), (5, "c'est complique", 2, datetime.datetime(2024, 10, 30, 18, 34, 39), 1)]
-#     lastMessage = "Explique plus en detail ?"
-#     bot.get_response(messages, lastMessage)

@@ -16,7 +16,8 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     password="",
-    database="chatbot_db"
+    database="chatbot_db",
+    port=3306
 )
 
 @app.route('/signup', methods=['POST'])
