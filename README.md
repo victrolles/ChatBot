@@ -32,7 +32,15 @@ In a terminal, use the following commands to start the frontend :
 ### Backend
 
 The backend needs **python 3.12.** to run. Download it on your own. \
-To make clean project, we will use a virtual environment. 
+To make clean project, we will use a virtual environment.
+
+If you want to use **GPUs**, you first need to follow theses steps :
+- Install the **CUDA Toolkit** with this link :https://developer.nvidia.com/cuda-toolkit
+- Install the **cuDNN** with this link : https://developer.nvidia.com/cudnn
+- Start your env and then download pytorch using this command : 
+    ```bash
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+    ```
 
 In **another** terminal, use the following commands to start the backend :
 - Go to the backend folder

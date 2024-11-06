@@ -7,6 +7,12 @@ class Bot:
 
     def __init__(self):
 
+        # Check if CUDA (GPU support) is available
+        if torch.cuda.is_available():
+            print(f"CUDA is available! Using GPU: {torch.cuda.get_device_name(0)}")
+        else:
+            print("CUDA is not available. Using CPU.")
+        
         # Set the device
         self.gpu = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
