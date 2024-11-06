@@ -24,7 +24,7 @@ In a terminal, use the following commands to start the frontend :
     ```bash
     npm i
     ```
-- Start the frontend
+- Start the frontend (IMPORTANT : First start the database MySQL)
     ```bash
     npm start
     ```
