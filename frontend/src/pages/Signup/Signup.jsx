@@ -29,7 +29,7 @@ export const Signup = () => {
         e.preventDefault();
         setErrors(validationSignup(values));
         if (errors.username === '' && errors.email === '' && errors.password === '') {
-            axios.post('http://localhost:8081/signup', values)
+            axios.post('http://localhost:5000/signup', values)
             .then(res => {
                 console.log(res);
                 navigation('/');

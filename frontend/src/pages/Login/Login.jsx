@@ -33,7 +33,7 @@ export const Login = () => {
         if (!validationErrors.email && !validationErrors.password) {
             console.log('Form submitted');
             try {
-                const res = await axios.post('http://localhost:8081/login', values);
+                const res = await axios.post('http://localhost:5000/login', values);
                 console.log("Login submitted", res);
     
                 if (res.data === 'Success') {

@@ -11,7 +11,7 @@ const Messages = () => {
 
   useEffect(() => {
     if (chatId) {
-        axios.post('http://localhost:8081/getMessagesFromChat', { chatId: chatId })
+        axios.post('http://localhost:5000/getMessagesFromChat', { chatId: chatId })
             .then(res => {
                 if (res.status === 200) {
                   setMessages(res.data);  // Store the chats in the state

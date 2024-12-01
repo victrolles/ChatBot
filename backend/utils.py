@@ -1,3 +1,5 @@
+import re
+
 def print_outputs(outputs):
     for output in outputs:
         prompt = output.prompt
@@ -32,8 +34,30 @@ def convert_messages_into_conversation(messages, lastMessage):
 
     return conversation
 
+# def convert_messages_into_chat(messages, lastMessage):
+#     conversation = []
+
+#     if messages != []:
+#         for message in messages:
+#             if message[4] == 1:
+#                 conversation += "Assistant: " + message[1] + "\n"
+#             else:
+#                 conversation += "User: " + message[1] + "\n"
+    
+#     conversation += "User: " + lastMessage + "\n"
+
+#     conversation += "Assistant: "
+
+#     return conversation
+
+# messages = [
+#     (1, "Hi! How can I assist you?", None, None, 1),
+#     (2, "Bonjour, peux-tu me répondre en français à partir de maintenant ?", None, None, 0),
+#     (3, "Oui, comment puis-je vous aider ?", None, None, 1)
+# ]
+
 def convert_messages_into_string(messages, lastMessage):
-    conversation = "System: You are a helpful assistant\n"
+    conversation = "System: You are a helpful assistant. Try to be clear and very concise, do not generate more than 512 characters by message.\n"
 
     if messages != []:
         for message in messages:
@@ -44,9 +68,27 @@ def convert_messages_into_string(messages, lastMessage):
     
     conversation += "User: " + lastMessage + "\n"
 
-    conversation += "Assistant: "
+    conversation += "Assistant : "
 
     return conversation
 
-def get_generated_text(outputs, prompts) -> str:
-    return outputs[0].replace(prompts[0], "").strip()
+def nettoyer_chaine(texte):
+    # Trouver la position de "Assistant :"
+    position = texte.find("Assistant : ")
+    if position != -1:
+        # Retourner la chaîne à partir de ce qui suit "Assistant :"
+        return texte[position + len("Assistant : "):]
+    return texte  # Retourner la chaîne originale si "Assistant :" n'est pas trouvé
+
+def extraire_contenu(texte):
+    # Utiliser une expression régulière pour capturer le contenu entre les premiers guillemets
+    pattern = r'"(.*?)"'
+    match = re.search(pattern, texte)
+    if match:
+        return match.group(1)  # Retourner le contenu capturé
+    return None  # Retourner None si aucun match n'est trouvé
+
+def get_generated_text(outputs, is_for_title = False) -> str:
+    if is_for_title:
+        return extraire_contenu(outputs[0])
+    return nettoyer_chaine(outputs[0])

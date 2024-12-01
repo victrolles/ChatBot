@@ -43,6 +43,7 @@
 
             .chats {
                 height: calc(100% - 155px);
+                overflow-y: scroll;
             }
 
             .navbar {

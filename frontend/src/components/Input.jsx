@@ -15,13 +15,13 @@ const Input = () => {
 
       if (!chatId) {
 
-        axios.post('http://localhost:8081/createChat', { email: user.name, content: text })
+        axios.post('http://localhost:5000/createChat', { email: user.name, content: text })
         .then(res => {
           if (res.status === 200) {
 
             console.log('Chat created:', res.data);
 
-            axios.post('http://localhost:8081/sendMessage', { chatId: res.data.id, content: text })
+            axios.post('http://localhost:5000/sendMessage', { chatId: res.data.id, content: text })
             .then(res => {
               if (res.status === 200) {
                 console.log('Message sent:', res.data);
@@ -41,7 +41,7 @@ const Input = () => {
 
       } else {
 
-        axios.post('http://localhost:8081/sendMessage', { chatId: chatId, content: text })
+        axios.post('http://localhost:5000/sendMessage', { chatId: chatId, content: text })
         .then(res => {
           if (res.status === 200) {
             console.log('Message sent:', res.data);

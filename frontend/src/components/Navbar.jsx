@@ -14,7 +14,7 @@ const Navbar = () => {
 
     useEffect(() => {
         if (user) {
-            axios.post('http://localhost:8081/getUsernameFromMail', { email: user.name })
+            axios.post('http://localhost:5000/getUsernameFromMail', { email: user.name })
                 .then(res => {
                     if (res.status === 200) {
                         setUsername(res.data.username);  // Store the chats in the state

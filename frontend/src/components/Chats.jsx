@@ -12,7 +12,7 @@ const Chats = () => {
 
     useEffect(() => {
         if (user) {
-            axios.post('http://localhost:8081/getChatsFromUser', { name: user.name })
+            axios.post('http://localhost:5000/getChatsFromUser', { name: user.name })
                 .then(res => {
                     if (res.status === 200) {
                         setChats(res.data);  // Store the chats in the state
