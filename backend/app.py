@@ -201,6 +201,7 @@ def createChat():
 
     # Ask the chatbot to create a chat name
     chatName = chatBot.get_chat_name(content)
+    print(chatName)
     # chatName = content
 
     # Add the chat to the database
